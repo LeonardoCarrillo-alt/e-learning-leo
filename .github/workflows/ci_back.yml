@@ -1,0 +1,45 @@
+name: Deploy Backend (Express)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install Backend Dependencies
+        run: npm install
+
+      - name: Upload Backend Code to EC2
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST_BACK }}
+          username: ${{ secrets.EC2_USER_BACK }}
+          key: ${{ secrets.EC2_KEY_BACK }}
+          source: "backend/"
+          target: "${{ secrets.EC2_BACKEND_DIR }}"
+          rm: true
+          strip_components: 1
+
+      - name: Install and Restart Backend on EC2
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST_BACK }}
+          username: ${{ secrets.EC2_USER_BACK }}
+          key: ${{ secrets.EC2_KEY_BACK }}
+          script: |
+            cd ${{ secrets.EC2_BACKEND_DIR }}
+            npm install
+            pm2 restart estudy-backend || pm2 start src/app.js --name estudy-backend
+            pm2 save
