@@ -37,12 +37,24 @@ jobs:
       - name: Crear .env en EC2
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.EC2_HOST_BACK }}
-          username: ${{ secrets.EC2_USER_BACK }}
-          key: ${{ secrets.EC2_KEY_BACK }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
           script: |
             cd /var/www/estudy-backend
-            cat > .env <<EOF DATABASE_URL=${{ secrets.DATABASE_URL }} PORT=${{ secrets.PORT }} JWT_SECRET=${{ secrets.JWT_SECRET }} DB_HOST=${{ secrets.DB_HOST }} DB_USER=${{ secrets.DB_USER }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} DB_NAME=${{ secrets.DB_NAME }} DB_PORT=${{ secrets.DB_PORT }} AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} AWS_REGION=${{ secrets.AWS_REGION }} AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }} EOF
+            printf "DATABASE_URL=%s\nPORT=%s\nJWT_SECRET=%s\nDB_HOST=%s\nDB_USER=%s\nDB_PASSWORD=%s\nDB_NAME=%s\nDB_PORT=%s\nAWS_ACCESS_KEY_ID=%s\nAWS_SECRET_ACCESS_KEY=%s\nAWS_REGION=%s\nAWS_BUCKET_NAME=%s\n" \
+            "${{ secrets.DATABASE_URL }}" \
+            "${{ secrets.PORT }}" \
+            "${{ secrets.JWT_SECRET }}" \
+            "${{ secrets.DB_HOST }}" \
+            "${{ secrets.DB_USER }}" \
+            "${{ secrets.DB_PASSWORD }}" \
+            "${{ secrets.DB_NAME }}" \
+            "${{ secrets.DB_PORT }}" \
+            "${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            "${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            "${{ secrets.AWS_REGION }}" \
+            "${{ secrets.AWS_BUCKET_NAME }}" > .env
 
       - name: Install and Restart Backend on EC2
         uses: appleboy/ssh-action@v1
