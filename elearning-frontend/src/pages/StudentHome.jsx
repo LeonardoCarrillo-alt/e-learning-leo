@@ -3,8 +3,7 @@ import { BookOpen } from "lucide-react";
 import ClassCard from "../components/ClassCard";
 import ModuleCard from "../components/ModuleCard";
 import { useAuthStore } from "../store/useAuthStore";
-
-const API_URL = "/api";
+import { API_URL } from "../config/api.js";
 
 export default function StudentHome() {
   const { token, userId } = useAuthStore();

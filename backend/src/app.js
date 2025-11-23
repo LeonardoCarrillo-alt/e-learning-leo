@@ -15,7 +15,16 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// Configurar CORS para permitir el frontend desde otra máquina EC2
+// Reemplaza con la IP pública o dominio de tu máquina EC2 del frontend
+const FRONTEND_URL = process.env.FRONTEND_URL || "*"; // Por defecto permite todos los orígenes
+
+app.use(cors({
+  origin: FRONTEND_URL === "*" ? true : FRONTEND_URL,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 
 
@@ -56,4 +65,9 @@ app.get("/", (req, res) => {
 connectDB();
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Backend E-Study iniciado en puerto ${PORT}`));
+// Escuchar en todas las interfaces (0.0.0.0) para permitir conexiones desde otras máquinas
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Backend E-Study iniciado en puerto ${PORT}`);
+  console.log(`Escuchando en todas las interfaces (0.0.0.0:${PORT})`);
+  console.log(`CORS configurado para: ${FRONTEND_URL}`);
+});

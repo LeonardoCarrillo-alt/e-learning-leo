@@ -3,8 +3,7 @@ import TeacherNavbar from "../components/TeacherNavBar";
 import { Plus } from "lucide-react";
 import ModuleForm from "../components/ModuleForm";
 import { useAuthStore } from "../store/useAuthStore";
-
-const API_URL = "/api";
+import { API_URL } from "../config/api.js";
 
 export default function TeacherHome() {
   const { token } = useAuthStore();
