@@ -34,7 +34,6 @@ jobs:
           rm: true
           strip_components: 1
 
-
       - name: Install and Restart Backend on EC2
         uses: appleboy/ssh-action@v1
         with:
