@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.EC2_KEY_BACK }}
           script: |
             cd /var/www/estudy-backend
-            printf "DATABASE_URL=%s\nPORT=%s\nJWT_SECRET=%s\nDB_HOST=%s\nDB_USER=%s\nDB_PASSWORD=%s\nDB_NAME=%s\nDB_PORT=%s\nAWS_ACCESS_KEY_ID=%s\nAWS_SECRET_ACCESS_KEY=%s\nAWS_REGION=%s\nAWS_BUCKET_NAME=%s\n" \
+            printf "DATABASE_URL=\"%s\"\nPORT=%s\nJWT_SECRET=%s\nDB_HOST=%s\nDB_USER=%s\nDB_PASSWORD=%s\nDB_NAME=%s\nDB_PORT=%s\nAWS_ACCESS_KEY_ID=%s\nAWS_SECRET_ACCESS_KEY=%s\nAWS_REGION=%s\nAWS_BUCKET_NAME=%s\n" \
             "${{ secrets.DATABASE_URL }}" \
             "${{ secrets.PORT }}" \
             "${{ secrets.JWT_SECRET }}" \
